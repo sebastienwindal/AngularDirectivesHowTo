@@ -1,0 +1,49 @@
+  <h1>The Angular Philosophy</h1>
+
+  <style>
+  .good {
+    color: #008800;
+  }
+  .bad {
+    color: #880000;
+  }
+  .highlight1 {
+    color: #000088;
+  }
+  .highlight2 {
+    color: #008888;
+  }
+  .intro-blockquote {
+    margin: 30px;
+    padding: 20px 40px 20px 40px;
+    background-color: #eee;
+    font-size: 1.5em;
+  }
+  .intro-blockquote h2 {
+    font-size: 40px;
+  }
+  .intro-blockquote strong {
+    font-weight: bold;
+    font-size: 1.75em;
+  }
+  </style>
+
+    <blockquote class="intro-blockquote">
+        <h2><span class="bad">NO DOM manipulation</span>, use <span class="good">Data Binding</span> instead...</h2>
+    </blockquote> 
+    <p>Unless... you have to! But then:</p>
+    <blockquote class="intro-blockquote">
+        <h2>Keep your <span class="good">DOM manipulation <strong>ONLY</strong> in directives</span>,
+        <span class="bad"><strong>ABSOLUTELY NO</strong> DOM MANIPULATION in CONTROLLERS</span> (and obviously services).</h2></blockquote>
+    </blockquote>
+
+
+    <p>In another word:</p>
+
+    <blockquote class="intro-blockquote"><h2>Keep your <span class="highlight1"><strong>JS</strong></span> <strong>OUT OF</strong> your
+    <span class="highlight2"><strong>HTML</strong></span> and your <span class="highlight2"><strong>HTML</strong></span> <strong>OUT OF</strong> your <span class="highlight1"><strong>JS</strong></span>.</h2></blockquote>
+
+
+
+    <next-button href="intro-2" ></next-button>
+  

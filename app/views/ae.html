@@ -1,0 +1,72 @@
+<h1>Make a directive that can be used both as an attribute or an element.</h1>
+
+
+<p>Example: Big green circle directive:</p>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>app.directive('bigGreenCircle', function() {
+  return {
+    restrict: 'AE',    
+    link: function(scope, element, attrs) {
+        
+        element.width(200);
+        element.height(200);
+        element.css('background-color', 'lime');
+        element.css('border-radius', 125);
+        element.css('display', 'inline-block');
+    }
+  };
+});
+</code></pre>
+
+<pre class="code-snippet"><code data-language="html" rainbow>&lt;div big-green-circle&gt;hello&lt;/div&gt;
+</code></pre>
+
+<div big-green-circle>hello</div>
+<pre class="code-snippet"><code data-language="html" rainbow>&lt;big-green-circle&gt;goodbye&lt;/big-green-circle&gt;
+</code></pre>
+<big-green-circle>goodbye</big-green-circle>
+
+
+<H3>Warning</h3>
+
+<p>A template in a directive makes sense for element directive, not always for a attribute directive.
+ it will replace the content of the associated html object</h3>
+
+<p>Example, a "small-red-square" directive:</p>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>app.directive('smallRedSquare', function() {
+  return {
+    restrict: 'AE',
+    template: "&lt;div style='width:100px;height:100px;background-color:red;'>&lt;/div>",
+    link: function(scope, element, attrs) {
+            
+    }
+  };
+});
+</code></pre>
+
+<h4>Using it as an element:</h4>
+
+<pre class="code-snippet"><code data-language="html" rainbow>&lt;small-red-square&gt;&lt;/small-red-square&gt;
+</code></pre>
+
+
+<small-red-square></small-red-square>
+
+<h4>Using it as an attribute:</h4>
+
+<pre class="code-snippet"><code data-language="html" rainbow>&lt;p small-red-square&gt;HELLO WORLD&lt;/small-red-quare&gt;
+</pre></code>
+
+
+<p small-red-square>HELLO WORLD</p>
+
+The text is gone, the content of the p tag has been replaced with the template of the directive. The dom tree looks like:
+
+<pre class="code-snippet"><code data-language="html" rainbow>&lt;p&gt;
+    &lt;div&gt;this element is the template directive...&lt;/div&gt;
+&lt;/p&gt;
+
+</pre></code>
+
+<next-button href="transclude" ></next-button>

@@ -1,0 +1,71 @@
+
+<style>
+
+.clone-it-list {
+    list-style: none;
+}
+.clone-it-list li {
+    margin: 10px;
+    width: 200px;
+    height: 50px;
+    padding: 10px;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+.beer {
+    background-color: #dfd;
+}
+.coffee {
+    background-color: #fdd;
+}
+
+</style>
+
+<h1>More interesting DOM manipulation</h1>
+
+<p>A more interesting DOM manipulation, deep cloning element as many times as you wish:</p>
+
+
+<pre ng-non-bindable class="code-snippet"><code data-language="javascript" rainbow>app.directive('cloneIt', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+        // do a setTimeout 0 to push the actual DOM cloning at the end of the queue
+        // so we are cloning elements AFTER angular has made the databinding happen.
+        setTimeout(function() {
+            var num = attrs.cloneIt;
+            if (!num) num = 1;
+ 
+            for (var i=0; i&lt;num; i++) {
+                var clone = element.clone();
+                element.after(clone);        
+            }
+        }, 0);
+    }
+  };
+});
+</code></pre>
+
+
+<pre ng-non-bindable class="code-snippet"><code data-language="html" rainbow>&lt;ul class="clone-it-list result">
+    &lt;li class="beer" clone-it="3">&lt;i class="icon-beer icon-large">&lt;/i> &lt;strong>BEER</strong>&lt;/li>
+    &lt;li class="coffee" clone-it="5">&lt;i class="icon-coffee icon-large">&lt;/i> &lt;em>coffee</em>&lt;/li>
+&lt;/ul>
+
+&lt;p&gt;He&lt;span clone-it="100"&gt;l&lt;/span&gt;o!&lt;/p&gt;
+</code></pre>
+
+<p>Results, 4 beers and 6 coffees:</p>
+<div  class="result" ng-controller="DirectiveCloneItCtrl">
+<ul class="clone-it-list" >
+    <li class="beer" clone-it="3"><i class="icon-beer icon-large"></i> <strong>BEER</strong></li>
+    <li class="coffee" clone-it="5"><i class="icon-coffee icon-large"></i> <em>coffee</em></li>
+</ul>
+<p>He<span clone-it="100">l</span>o!</p>
+
+</div>
+
+
+
+<next-button href="directivecolorify" ></next-button>

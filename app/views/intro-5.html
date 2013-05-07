@@ -1,0 +1,104 @@
+<style>
+.highlighted-line {    
+    width: 100%
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+}
+.red-highlight {
+    background-color: rgba(255,0,0,0.5);
+}
+.blue-highlight {
+    background-color: rgba(100,100,255,0.5);
+}
+.green-highlight {
+    background-color: rgba(0,255,0,0.5);
+}
+.beige-highlight {
+    background-color: rgba(200,200,100,0.5);
+}
+.bluegreen-highlight {
+    background-color: rgba(100,200,200,0.5);
+}
+.pink-highlight {
+    background-color: rgba(250,150,250,0.5);
+}
+
+.code-snippet strong {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+.legend {
+    margin: 10px 0px 10px 0px;
+    padding: 20px;
+}
+</style>
+
+<h1>Directive structure</h1>
+
+<div style="display:inline-block; height: 630px;">
+<pre class="code-snippet" style="width: 600px;">
+
+myModule.directive('directiveName', function factory(injectables) {
+  return {
+    <strong>priority</strong>: 0,
+<div class="highlighted-line red-highlight">    <strong>template</strong>: '&lt;div>&lt;/div>',
+    <strong>templateUrl</strong>: 'directiveTmpl.html',
+    <strong>replace</strong>: false,
+    <strong>transclude</strong>: false,</div>
+<div class="highlighted-line green-highlight">    <strong>controller</strong>: {},
+    <strong>require</strong>: 'otherDirectiveName',</div>
+<div class="highlighted-line beige-highlight">    <strong>restrict</strong>: 'AEC',</div>
+<div class="highlighted-line blue-highlight">    <strong>scope</strong>: { 
+        inputStuff: '@',
+        outputStuff: '=',
+        callback: '&',
+    },
+</div>
+<div class="highlighted-line pink-highlight">    <strong>compile</strong>: function compile(tElement, <span class="blue-highlight">tAttrs</span>, transclude) {
+      return {
+        pre: function preLink(scope, iElement, <span class="blue-highlight">iAttrs</span>, controller) { ... },
+        post: function postLink(scope, iElement, <span class="blue-highlight">iAttrs</span>, controller) { ... }
+      }
+    },</div>
+<div class="highlighted-line bluegreen-highlight">    <strong>link</strong>: function postLink(scope, iElement, <span class="blue-highlight">iAttrs</span>) { ... }</div>
+  };
+});
+</pre>
+</div>
+
+<div style="display:inline-block;height:100%; width:200px;">
+    <div class="highlighted-line red-highlight legend">What the directive looks like</div>
+
+    <div class="highlighted-line green-highlight legend">Interfacing with other directives</div>
+
+    <div class="highlighted-line beige-highlight legend">What your directive is (element, attribute, etc...)</div>
+
+    <div class="highlighted-line blue-highlight legend">Interfacing with outside word (html, controllers)</div>
+    
+    <div class="highlighted-line pink-highlight legend">Compile function, better for DOM transformation</div>
+    
+    <div class="highlighted-line bluegreen-highlight legend">The beef of your directive, DOM behavior changes, live changes, event handling.</div>
+
+    <div class="legend">&nbsp;</div>
+</div>
+
+
+<h2>90% of the time:</h2>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow ng-non-bindable>app.directive('myDirective', function() {
+    return {
+        restrict: 'A', // or 'E'
+        //template: 'some html stuff',
+        //scope: {
+        //  someVar: '@'
+        //},
+        link: function(scope, element, attrs) {            
+            element.IamDoingStuffWithMyElement();
+        }
+    };
+});
+</code></pre>
+
+
+<next-button href="helloworld" ></next-button>

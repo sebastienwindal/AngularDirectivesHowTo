@@ -1,0 +1,36 @@
+<div ng-controller="DirectivePartialColorifyCtrl">
+
+<h1>Pass arguments to directive II</h1>
+
+<h3>You can pass multiple arguments... attrs is a dictionaly of all arguments, even other attr directives...</h3>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>app.directive('partialColorify', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+        if (!attrs.colorifyRegex)
+            attrs.colorifyRegex = ".*";
+
+        var regex = new RegExp(attrs.colorifyRegex, "g");
+        if (!regex) return;
+        
+        var text = element.text();        
+        var html = text.replace(regex, function(match) {
+            return '&lt;span style="color:' + attrs.partialColorify + '">' + match + '&lt;/span>';
+        });      
+        element.html(html);
+    }
+  };
+});</code>
+</pre>
+
+<pre class="code-snippet" ng-non-bindable><code data-language="html" rainbow>&lt;p partial-colorify="#0af" colorify-regex="[aeiouy]">Lorem ipsum Id mollit culpa (...)&lt;/p></code></pre>
+
+<div class="result">
+    <p partial-colorify="#0af" colorify-regex="[aeiouy]">Lorem ipsum In laborum quis magna labore nisi ut dolor Excepteur est minim eu esse nostrud id elit occaecat veniam nulla et labore Excepteur dolore aute sit ad occaecat in pariatur amet elit veniam dolor occaecat Duis est irure voluptate Excepteur ad consequat aute esse enim occaecat adipisicing et sint fugiat adipisicing nulla pariatur tempor eiusmod cillum cupidatat culpa ea labore voluptate adipisicing Excepteur labore tempor velit esse veniam minim Excepteur officia nisi do ut exercitation cupidatat do eiusmod fugiat amet veniam enim in in dolore fugiat eu ut ea Duis occaecat id veniam culpa aute dolore tempor veniam cupidatat dolor eu mollit incididunt mollit veniam Duis cillum consectetur labore est ut pariatur pariatur ut in aliqua cillum eu quis labore in sunt adipisicing est cillum et culpa reprehenderit in velit Excepteur et dolore sed commodo ad voluptate adipisicing Duis magna nostrud culpa ex aliquip Excepteur sint consequat mollit cillum nisi non in tempor proident dolor ea aliqua id sed eiusmod mollit in aliquip eiusmod qui eu ut sunt laborum dolore id Excepteur Excepteur dolor aliqua Ut consectetur qui Ut aliquip officia sed aliquip.</p>
+</div>
+
+
+<next-button href="directivepartialcolorify2" ></next-button>
+
+</div>

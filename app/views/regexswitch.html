@@ -1,0 +1,126 @@
+<h1>Directive to directive communication</h1>
+
+<h3>directive controller + ng-require...</h3>
+
+<p>Let's make better ng-switch and ng-case directives...</p>
+
+<p>ng-switch, ng-switch-when mad ng-switch-default are a set of directives that allow to programmatically switch html structure depending of a scope value (status here):</p>
+
+<pre class="code-snippet"><code data-language="html" rainbow>&lt;ng-switch on="status"&gt;
+    &lt;div ng-switch-when="error" class="bad"&gt;&lt;i class="error-icon"&gt; ERROR! &lt;back-button>&lt;/back-button>&lt;/div&gt;
+    &lt;div ng-switch-when="pending"&gt;&lt;spinner&gt;&lt;/spinner&gt;&lt;/div&gt;
+    &lt;div ng-switch-when="sucess" class="good">
+        &lt;div&gt;
+            etc...
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/ng-switch&gt;
+</code></pre>
+
+<p>The angular provided ng-switch-when use static constant, let's make a similar set of directives, that can use a regular expression instead of a constant value, for instance:</p>
+
+<pre class="code-snippet"><code data-language="html" rainbow>&lt;div sw-switch="animal">
+    &lt;div sw-match="[dD](og|awg)"&gt;BARK&lt;/div&gt;
+    &lt;div sw-match="cat">The cat says &lt;strong>MEOW&lt;/strong>...&lt;/div&gt;
+    &lt;div sw-match="cat|lion"&gt;Lion&lt;/div&gt;
+    &lt;div sw-match="human"&gt;HELLO&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+
+<h3>Result:</h3>
+
+<input ng-model="animal"></input>
+  
+<div sw-switch="animal">
+    <div sw-match="[dD](og|awg)">BARK</div>
+    <div sw-match="cat">The cat says <strong>MEOW</strong>...</div>
+    <div sw-match="cat|lion">Lion</div>
+    <div sw-match="human">HELLO</div>
+</div>
+
+<hr>
+
+<h3>swMatch directive</h3>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>app.directive('swMatch', function() {
+
+  var myDirective = {
+    transclude: 'element', // compile the whole content of the associated element and make it available to the directive
+    restrict: 'A', // attribute
+    require: '^swSwitch', // Thanks to this, we now have access the sw-switch directive controller
+    compile: function compile(tElement, tAttrs, tTransclude) {
+      return function postLink(scope, element, attrs, controller) {
+        // controller is a reference to the swSwitch directive.
+        // Add enough information so the swSwitch directive
+        // can decide whether the element associated with this directive
+        // (element and its content transclude) should be displayed or not...
+        controller.cases.push({ transclude: tTransclude, element: element, regex: attrs.swMatch });
+      }
+    }
+  };
+  return myDirective; 
+});
+</code></pre>
+
+<h3>swSwitch directive</h3>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>app.directive('swSwitch', function() {
+
+  var myDirective = {
+    restrict: 'A',
+    scope: false,
+    // define a controller, this allows us to share data
+    // with this directive and the swMatch child directive.
+    controller: ['$scope', function swSwitchController() {
+     this.cases = []; // each child directive is adding information to this array
+    }],
+    link: function(scope, element, attr, controller) {
+      // the expression we want to match against, 
+      // we pass it as an argument in ng-switch="expression"
+      var watchExpr = attr.swSwitch;
+      var matchingElements = [];
+      
+      // we want to recompute the DOM tree inside the
+      // swSwitch directive if the text to match against changes.
+      scope.$watch(watchExpr, function ngSwitchWatchAction(newValue) {        
+        if (matchingElements.length > 0) {
+          for (var i in matchingElements) {
+            matchingElements[i].remove()
+          };
+          matchingElements = [];
+        }
+        if (!newValue)
+          return; // nothing to match against.
+        
+        selectedScope = scope.$new();
+      
+        // Each sw-match directive added some data to controller.cases,
+        // decide to disply the associated elements or not
+        for (i in controller.cases) {
+          // the content of the element 
+          var selectedTransclude = controller.cases[i].transclude;
+
+          // the regular expression to match against.
+          var caseRegexStr =  controller.cases[i].regex;
+        
+          var regex = new RegExp(caseRegexStr);
+        
+          if (newValue.search(regex) != -1) {
+            selectedTransclude(selectedScope, function(caseElement) {
+              matchingElements.push(caseElement);
+              element.append(caseElement); 
+            });
+
+          }
+        }
+      });
+    }
+  };
+  return myDirective;
+});
+</code>
+</pre>
+
+
+<next-button href="theend" ></next-button>

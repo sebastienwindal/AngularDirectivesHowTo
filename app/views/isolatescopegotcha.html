@@ -1,0 +1,87 @@
+<style>
+
+.my-list li {
+    display: inline-block;
+    border: 1px solid #e0e0e0;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    margin: 15px;
+    padding: 10px;
+}
+</style>
+
+<h1>Isolate scope gotcha!</h1>
+
+<p>The problem with isolate scope, is that they isolate the scope...</p>
+
+<h3>Controller:</h3>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>    $scope.customers = [    {
+                                firstName: "John",
+                                lastName: "Doe"
+                            },
+                            {
+                                firstName: "Jane",
+                                lastName: "Roe"
+                            }
+                        ];
+</code></pre>
+
+<h3>HTML:</h3>
+
+<pre ng-non-bindable class="code-snippet"><code data-language="html" rainbow>&lt;ul>
+    &lt;li ng-repeat="customer in customers">
+        &lt;div>fist name: {{customer.firstName}}&lt;/div>
+        &lt;div>last name: {{customer.lastName}}&lt;/div>
+    &lt;/li>
+&lt;/ul>
+</code></pre>
+
+<h3>Result:</h3>
+
+<ul class="my-list">
+    <li ng-repeat="customer in customers">
+        <div>fist name: {{customer.firstName}}</div>
+        <div>last name: {{customer.lastName}}</div>
+    </li>
+</ul>
+
+<hr>
+
+<h2>Exact Same thing with a directive that isolates the scope:</h2>
+
+<h3>directive:</h3>
+
+<pre  class="code-snippet"><code data-language="javascript" rainbow>app.directive('unfortunateDirective', function() {
+    return {
+        restrict: 'A',
+        scope: {
+        },
+        link: function(scope, element, attrs) {
+        }
+    }
+});
+</code></pre>
+
+
+<h3>HTML:</h3>
+
+<pre ng-non-bindable class="code-snippet" ><code data-language="html" rainbow>&lt;ul>
+    &lt;li ng-repeat="customer in customers" unfortunate-directive>
+        &lt;div>fist name: {{customer.firstName}}&lt;/div>
+        &lt;div>last name: {{customer.lastName}}&lt;/div>
+    &lt;/li>
+&lt;/ul>
+</code></pre>
+
+<h3>Result:</h3>
+
+<ul class="my-list">
+    <li ng-repeat="customer in customers" unfortunate-directive>
+        <div>fist name: {{customer.firstName}}</div>
+        <div>last name: {{customer.lastName}}</div>
+    </li>
+</ul>
+
+
+<next-button href="navdirective" ></next-button>

@@ -1,0 +1,11 @@
+/**
+ * Adds lines and numbers to the pre element.
+ * Set the pre color in CSS for the number color.
+ * Set the pre border-color in CSS for the line color.
+ * Set the starting line number by adding data-line="234" attribute to code element.
+ * Disable line numbering by setting data-line="-1"
+ * @author Ron Valstar (http://www.sjeiti.com/)
+ * @namespace Rainbow.linenumbers
+ * @requires Rainbow.js
+ */
+if(window.Rainbow&&!window.Rainbow.linenumbers){window.Rainbow.linenumbers=(function(a){var d=true,b,c;a.onHighlight(function(l){var n=parseInt,j=l.innerHTML.replace(/\r\n|\r/g,"\n").split("\n").length,u=l.getAttribute("data-line")<<0,C=u>=0,w=j===0?1:(Math.log(j)/2.303<<0)+1,y=j,z=l.parentNode,p=z.nodeName=="PRE",k=function(i){return i.currentStyle||(document.defaultView&&document.defaultView.getComputedStyle(i,null))||i.style},o=k(l),A=k(z),q=n(A.paddingTop)+n(o.marginTop)+n(o.paddingTop),g=document.createElement("canvas"),B=g.getContext("2d"),t=document.createElement("canvas"),D=t.getContext("2d");if(isNaN(c)){var x=5,m=document.createElement("div"),f=m.style,h={font:o.font,width:"auto",display:"inline-block"};m.appendChild(document.createTextNode(new Array(1<<x).join("a")+"a"));for(var r in h){f[r]=h[r]}document.body.appendChild(m);c=m.offsetWidth>>x;b=n(o.lineHeight);if(isNaN(b)){b=m.offsetHeight}document.body.removeChild(m)}g.setAttribute("width",w*c);g.setAttribute("height",(1+j)*b);B.font=o.fontSize+" "+o.fontFamily;B.fillStyle=A.color;B.textBaseline="bottom";while(y--){var e=j-y;B.fillText((u+e-1)+"",0,e*b)}t.setAttribute("width",1);t.setAttribute("height",b);D.fillStyle=A.borderColor;D.fillRect(0,b-1,1,1);if(o.wordWrap!="normal"&&console&&console.warn){console.warn("rainbow.linenumbers: For correct linenumbers wordwrapping should be set to normal.")}if(p){var v=A.backgroundColor;if(d){v="url("+t.toDataURL()+") 0 "+q+"px,"+v}if(C){v="url("+g.toDataURL()+") "+c+"px "+q+"px no-repeat,"+v;z.style.paddingLeft=(parseInt(A.paddingLeft)+c*(w+1))+"px"}z.style.background=v}});return{toString:function(){return"[Object Rainbow.linenumbers]"}}})(window.Rainbow)};

@@ -1,0 +1,79 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none;
+}
+
+.directive-headline {
+    
+}
+
+.directive-subtitle {
+    font-size: 10px;
+    margin: -28px 0px 0px 0px;
+    text-decoration: italic;
+    font-weight: normal;
+    color: #aaa;
+}
+
+.current-directive {
+    background-color: #338;
+}
+
+.menu-seleced-item-icon {
+    float: left;
+    margin-left: -20px;
+    margin-top: 20px;
+}
+
+.top-bar {
+    background-color: #333;
+}
+
+.content {
+
+    padding: 20px;
+}
+
+.view-enter-setup, .view-leave-setup {
+  -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940)   0.3s;
+  -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940)      0.3s;
+  -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940)        0.3s;
+  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940)           0.3s;
+}
+
+
+/* initial animation position */
+.view-enter-setup { 
+    position:absolute;
+    left: 200px;
+    opacity: 0.0;
+}
+/* final animation position */
+.view-enter-setup.view-enter-start {
+    position:absolute;
+    left: 20px;
+    opacity: 1.0;
+}
+/* initial animation position */
+.view-leave-setup { 
+    position:absolute;
+    left: 0px;
+    opacity: 0.5;
+}
+/* final animation position */
+.view-leave-setup.view-leave-start {
+    position:absolute;
+    left: -500px;
+    opacity: 0.0;
+}
+
+.code-snippet, .result {
+    width: 800px;
+    margin: 20px 40px 20px 40px;
+}
+
+.next-button {
+    margin: 20px 30px 20px 0px;
+}
+.next-button i {
+    margin-left: 10px;
+}

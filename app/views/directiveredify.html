@@ -1,0 +1,28 @@
+<div ng-controller="DirectiveRedifyCtrl">
+
+<h1>Simple DOM manipulation</h1>
+
+
+<p>A very simple "attribute" directive that changes the text color of the associated element to red...</p>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>app.directive('redify', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      // change the color to red
+      element.css('color', 'red');
+    }
+  };
+});</code>
+</pre>
+
+<pre class="code-snippet" ng-non-bindable><code data-language="html" rainbow>&lt;p redify&gt;hello world&lt;/p&gt;</code></pre>
+
+<div class="result">
+    <p redify>hello world</p>
+</div>
+
+
+<next-button href="directivecloneit" ></next-button>
+
+</div>

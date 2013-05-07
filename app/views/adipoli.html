@@ -1,0 +1,115 @@
+
+    <link rel="stylesheet" href="styles/adipoli.css">    
+<style>
+.adipoli-container {
+    background-color: black;
+    display:inline-block;
+    margin: 10px;
+    border: 1px solid black;
+    padding: 0px;
+}
+.adipoli-container img {
+    margin: 0px;
+}
+</style>
+
+<h1>Wrapping a jquery plugin into a directive</h1>
+
+Using a lot of jquery controls look like this in your html:
+
+<pre class="code-snippet"><code data-language="html" rainbow>&lt;div id="element1"&gt;&lt;/div&gt;
+&lt;div id="element2"&gt;&lt;/div&gt;
+&lt;div id="element3"&gt;&lt;/div&gt;</code>
+</pre>
+and in your javascript:
+
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>$('#element1').jqPlugin({
+    'option1' : 'some',
+    'option2' : 'different'
+});
+$('#element2').jqPlugin({
+    'option1' : 'options',
+    'option2' : 'specified'
+});
+$('#element3').jqPlugin({
+    'option1' : 'in',
+    'option2' : 'javascript'
+});
+</code></pre>
+
+For instance:
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>// jQueryUI Slider:
+$( "#mySliderDiv" ).slider();
+
+// jqueryUI calendar
+$( "#myDatepickerDiv" ).datepicker();
+
+// bootstrap modal dialog
+$("#modal-content").modal('show');
+
+// etc...
+
+</code></pre>
+
+Wrapping it can be as easy as this:
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>app.directive('jqPlugin', function() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var options = {};
+            if (attrs.option1)
+                options['option1'] = attrs.option1;
+            if (attrs.option2)
+                options['option2'] = attrs.option2;
+                
+            element.jqPlugin(options);
+        }
+    };
+});</code>
+</pre>
+
+and your html looks now like this:
+
+<pre class="code-snippet"><code data-language="html" rainbow>&lt;div jq-plugin option1="some" option2="different"&gt;&lt;/div&gt;
+&lt;div jq-plugin option1="options" option2="specified"&gt;&lt;/div&gt;
+&lt;div jq-plugin option1="in" option2="html"&gt;&lt;/div&gt;</code>
+</pre>
+
+<p>Notice it has become a lot more declarative, the options about that element are now defined with that
+    element and it is nowhere using any IDs.</p>
+
+<h2>Example</h2>
+
+<p>The <a href="http://cube3x.com/adipoli-jquery-image-hover-plugin/">adipoli jquery plugin</a> wrapped in an angular
+    directive:</p>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>app.directive('adipoli', function() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var options = {};
+            if (attrs.hoverEffect) options['hoverEffect'] = attrs.hoverEffect;
+            if (attrs.boxCols) options['boxCols'] = attrs.boxCols;
+            if (attrs.boxRows) options['boxRows'] = attrs.boxRows;
+            if (attrs.slices) options['slices'] = attrs.slices;
+            if (attrs.slices) options['imageOpacity'] = attrs.imageOpacity;
+
+            element.adipoli(options);
+        }
+    };
+});</code>
+</pre>
+
+<pre class="code-snippet"><code data-language="html" rainbow>&lt;img src="tiger.jpg" adipoli image-opacity="0.2" hover-effect="foldLeft" slices="7" />
+&lt;img src="dog.jpg" adipoli image-opacity="0.2" hover-effect="boxRandom" box-cols="8" box-rows="8" />
+&lt;img src="cat.jpg" adipoli image-opacity="0.2" hover-effect="sliceDown" slices="20"/>
+</code></pre>
+
+<div class="adipoli-container" ng-cloak><img src="images/tiger.jpg" adipoli image-opacity="0.2" hover-effect="foldLeft" slices="7" /></div>
+<div class="adipoli-container" ng-cloak><img src="images/dog.jpg" adipoli image-opacity="0.2" hover-effect="boxRandom" box-cols="8" box-rows="8" /></div>
+<div class="adipoli-container" ng-cloak><img src="images/cat.jpg" adipoli image-opacity="0.2" hover-effect="sliceDown" slices="20" /></div>
+
+<next-button href="ae" ></next-button>

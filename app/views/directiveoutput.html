@@ -1,0 +1,104 @@
+<style>
+.color-grid li {
+  display: inline-block;
+  width:12px;
+  height:12px;
+  margin:0px;
+  padding:0px;
+  float: left;
+}
+
+.color-grid {
+  margin: 30px;
+  min-height: 120px;
+}
+</style>
+
+<h1>Directive with output attributes</h1>
+
+<h3>use the equal attribute...</h3>
+
+<p>To sum up, when defining an isolated scope in a directive:</p>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>scope: {
+    attr1: '@',
+    attr2: '&',
+    attr3: '='
+}
+</code>
+</pre>
+
+<ul>
+    <li>attr1 is read-only text.
+    <li>attr2 is a read-only expression, well suited for callbacks
+    <li>attr3 is a two-way read/write property, changes to it will be reflected in the parent scope
+</ul>
+
+<p>Example another nav bar...</p>
+
+<color-filter-bar primary-color="currentColor"></color-filter-bar>
+
+<ul class="color-grid">
+  <li  
+      ng-repeat="c in colors" 
+      style="background-color:rgb({{c.r}},{{c.g}},{{c.b}});"
+      ng-show="c.primary==currentColor || currentColor=='any'"></li>
+</ul>
+
+
+<h3>JS:</h3>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>app.directive('colorFilterBar', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            primaryColor: '='
+        },
+        template: '&lt;dl class="sub-nav">' +
+                    '&lt;dd ng-class="{true:\'active\'}[c.selected]" ng-repeat="c in primaryColors">' +
+                        '&lt;a ng-click="selectColor(c)">{{c.color}}&lt;/a>' + 
+                    '&lt;/dd>' +
+                  '&lt;/dl>',
+        link: function(scope, element, attrs) {
+            scope.primaryColors = [ 
+                                    { color: "any",     selected: true  },
+                                    { color: "red",     selected: false },
+                                    { color: "green",   selected: false },
+                                    { color: "blue",    selected: false }
+                                ];
+
+            scope.selectColor = function(c) {
+                scope.primaryColor = c.color;
+                _.each(scope.primaryColors, function(color) {
+                    color.selected = color.color === c.color;
+                });
+            };
+        }
+    };
+});
+</code>
+</pre>
+
+
+<h3>HTML:</h3>
+<pre ng-non-bindable class="code-snippet"><code data-language="javascript" rainbow>&lt;color-filter-bar primary-color="currentColor">&lt;/color-filter-bar>
+
+&lt;ul>
+  &lt;li ng-repeat="c in colors" 
+      style="background-color:rgb({{c.r}},{{c.g}},{{c.b}});"
+      ng-show="c.primary==currentColor || currentColor=='any'">&lt;/li>
+&lt;/ul>
+</code>
+</pre>
+<p>currentColor is a scope variable in my controller, colors is an array of random colors generated programmatically,
+its elements look like this:</p>
+
+<pre ng-non-bindable class="code-snippet"><code data-language="javascript" rainbow>[
+    { r: 200, g: 12,  b:100,  primary: 'red'    },
+    { r: 2    g: 150, b:100,  primary: 'green'  },
+    etc...
+]
+</code>
+</pre>
+
+<next-button href="isolatescopegotcha"></next-button>

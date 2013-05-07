@@ -1,0 +1,103 @@
+
+<style>
+    textarea {
+        width: 500px;
+        height: 100px;
+    }
+</style>
+
+
+<h1>The jquery way</h1>
+
+<div>
+    <form>        
+        <textarea id="myInputTextArea"></textarea>
+        <p>You have typed <span id="myWordCountSpan"></span> words.</p>
+        <p id="myHighlightedText"></p>
+    </form>
+</div>
+
+<h3>The HTML:</h3>
+
+<pre class="code-snippet"><code data-language="html" rainbow>&lt;form&gt;
+    &lt;textarea id="myInputTextArea">&lt;/textarea>
+    &lt;p>You have typed &lt;span id="myWordCountSpan">&lt;/span> words.&lt;/p>
+    &lt;p id="myHighlightedText">&lt;/p>
+&lt;/form>
+</code>
+</pre>
+
+
+<h3>The Javascript:</h3>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>var colorLengthArray = [ "red", "green", "blue", "cyan", "lime", "pink", "Maroon", "MediumAquaMarine", "MediumBlue", "MediumOrchid" ]; 
+
+function updateUI() {
+
+    var text = $("#myInputTextArea").val();
+
+    // update word count:
+    var wordArray = text.split(/[^a-zA-Z0-9-]/g);
+    var cleanedUpArray = _.filter(wordArray, function(w) { return w.length > 0;});
+    $("#myWordCountSpan").text(cleanedUpArray.length);
+
+    // highlight words in array
+    var html = text.replace(/([A-Za-z0-9-]+)/g, function(s, group) {
+            var index = (group.length >= colorLengthArray.length) ? colorLengthArray.length : group.length;
+            var color = colorLengthArray[index-1];
+            return "<span style='color:" + color + "'>" + group + "</span>";
+    });
+    
+    $("#myHighlightedText").html(html);
+}
+
+$("#myInputTextArea").bind("keyup cut paste", updateUI);
+
+updateUI();
+</code></pre>
+
+<ul>
+<li>(15 lines of actual code)</li>
+<li>3 selectors used in the javascript that will have to be kept in sync with the html</li>
+</ul>
+
+<script>
+    var colorLengthArray = [    "red", 
+                                "green", 
+                                "blue", 
+                                "cyan", 
+                                "lime", 
+                                "pink",
+                                "Maroon",
+                                "MediumAquaMarine",
+                                "MediumBlue",
+                                "MediumOrchid",                                        
+                                ]; 
+
+    function updateUI() {
+
+        var text = $("#myInputTextArea").val();
+
+        // update word count:
+        var wordArray = text.split(/[^a-zA-Z0-9-]/g);
+        var cleanedUpArray = _.filter(wordArray, function(w) { return w.length > 0;});
+        $("#myWordCountSpan").text(cleanedUpArray.length);
+
+        // highlight words in array
+        var html = text.replace(/([A-Za-z0-9-]+)/g, function(s, group) {
+                var index = (group.length >= colorLengthArray.length) ? colorLengthArray.length : group.length;
+                var color = colorLengthArray[index-1];
+                return "<span style='color:" + color + "'>" + group + "</span>";
+        });
+        
+        $("#myHighlightedText").html(html);
+    }
+   
+    $("#myInputTextArea").bind("keyup cut paste", updateUI);
+
+    updateUI();
+</script>
+
+
+
+<next-button href="intro-3" ></next-button>

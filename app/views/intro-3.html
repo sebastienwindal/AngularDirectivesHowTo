@@ -1,0 +1,76 @@
+
+<style>
+    textarea {
+        width: 500px;
+        height: 100px;
+    }
+</style>
+
+
+<h1>The Angular way</h1>
+
+<div ng-controller="WordCountCtrl">
+    <form>        
+        <textarea ng-model="myText"></textarea>
+        <p>You have typed {{wordCount}} words.</p>
+        <highlighted-p text="{{myText}}"></highlighted-p>
+    </form>
+</div>
+
+<h3>The HTML</h3>
+
+<pre class="code-snippet"><code data-language="html" rainbow ng-non-bindable>&lt;form>        
+    &lt;textarea ng-model="myText">&lt;/textarea>
+    &lt;p>You have typed {{wordCount}} words.&lt;/p>
+    &lt;highlighted-p text="{{myText}}">&lt;/highlighted-p>
+&lt;/form>
+</code></pre>
+
+<h3>The Controller</h3>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow ng-non-bindable>app.controller('WordCountCtrl', function($scope) {
+   
+   $scope.wordCount = 0;
+   $scope.myText = "";
+
+   $scope.$watch("myText", function(newText) {
+        var wordArray = $scope.myText.split(/[^a-zA-Z0-9-]/g);
+        var cleanedUpArray = _.filter(wordArray, function(w) { return w.length > 0;});
+        $scope.wordCount = cleanedUpArray.length;
+   });
+});</code></pre>
+
+<p>9 lines of codes...</p>
+
+<h3>The directive</h3>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow ng-non-bindable>app.directive('highlightedP', function() {
+    return {
+        scope: {
+            text:'@'
+        },
+        template: '&lt;div ng-bind-html-unsafe="highlightedHTML">&lt;/div>',
+        restrict: 'E',
+        link: function(scope, element, attrs, ctrl) {
+            scope.colorLengthArray = [  "red","green","blue","cyan","lime","pink","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid"];             
+
+            scope.HTMLifyText = function(t) {                
+                scope.highlightedHTML = t.replace(/([A-Za-z0-9-]+)/g, function(s, group) {
+                    var index = (group.length >= scope.colorLengthArray.length) ? scope.colorLengthArray.length : group.length;
+                    var color = scope.colorLengthArray[index-1];
+                    return "<span style='color:" + color + "'>" + group + "</span>";
+                });
+            };            
+            scope.$watch('text', function(t) {
+                scope.HTMLifyText(t);
+            });
+        }
+    };
+});
+</code></pre>
+
+22 lines of codes.
+
+
+
+    <next-button href="intro-5" ></next-button>

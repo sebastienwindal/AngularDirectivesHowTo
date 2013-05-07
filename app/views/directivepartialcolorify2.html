@@ -1,0 +1,197 @@
+<div ng-controller="DirectivePartialColorifyCtrl">
+
+<h1>Pass arguments to directive III</h1>
+
+<h3>React from attribute changes...</h3>
+
+<p>Let us try something with our previous "partial colorify" directive:</p>
+
+<pre class="code-snippet" ng-non-bindable><code data-language="html" ng-no-binding rainbow>color: &lt;input ng-model="color"> &lt;span style="color:{{color}};">{{color}}&lt;/span>
+
+&lt;p partial-colorify="{{color}}" colorify-regex="[aeiouy]">Lorem ipsum Id mollit culpa (...)&lt;/p></code></pre>
+
+<div class="result">
+    <p>color: <input ng-model="color" /> <span style="color:{{color}};">{{color}}</span></p>
+    <p partial-colorify="{{color}}" colorify-regex="[aeiouy]">Lorem ipsum In laborum quis magna labore nisi ut dolor Excepteur est minim eu esse nostrud id elit occaecat veniam nulla et labore Excepteur dolore aute sit ad occaecat in pariatur amet elit veniam dolor occaecat.</p>
+</div>
+
+
+<h3><i class="icon-large icon-exclamation-sign"></i> It does not work.</h3>
+<p>The link method is only run once.</p>
+
+<hr>
+
+<h1>Method 1</h1>
+
+<h3>$watch for attribute changes...</h3>
+
+<h3>Javascript:</h3>
+
+<pre class="code-snippet" ng-non-bindable><code data-language="javascript" ng-no-binding rainbow>app.directive('partialColorify2', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+        if (!attrs.colorifyRegex)
+            attrs.colorifyRegex = ".*";
+
+        var regex = new RegExp(attrs.colorifyRegex, "g");
+        if (!regex) return;
+        
+        scope.$watch(attrs.partialColorify2, function(newValue) {
+            var text = element.text();        
+            var html = text.replace(regex, function(match) {
+                return '&lt;span style="color:' + newValue + '">' + match + '&lt;/span>';
+            });      
+            element.html(html);
+        });
+    }
+  };
+});
+</code></pre>
+
+<h3>HTML:</h3>
+
+<pre class="code-snippet" ng-non-bindable><code data-language="html" ng-no-binding rainbow>color: &lt;input ng-model="color2"> &lt;span style="color:{{color2}};">{{color2}}&lt;/span>
+
+&lt;p partial-colorify2="color2" colorify-regex="[aeiouy]">Lorem ipsum Id mollit culpa (...)&lt;/p></code></pre>
+
+<h3>Result:</h3>
+
+<div class="result">
+    <p>color: <input ng-model="color2" /> <span style="color:{{color2}};">{{color2}}</span></p>
+    <p partial-colorify2="color2" colorify-regex="[aeiouy]">Lorem ipsum In laborum quis magna labore nisi ut dolor Excepteur est minim eu esse nostrud id elit occaecat veniam nulla et labore Excepteur dolore aute sit ad occaecat in pariatur amet elit veniam dolor occaecat.</p>
+</div>
+
+
+<h3>IMPORTANT:</h3>
+
+<div class="result"> 
+    <p>save yourself hours of hair pulling frustration... It you have a $watch on the attribute, it is</p>
+    <pre class="code-snippet" ng-non-bindable><code data-language="html" ng-no-binding rainbow>&lt;p partial-colorify2="color2" ...
+    </code></pre>
+    <p><strong>AND NOT</strong></p>
+    <pre class="code-snippet" ng-non-bindable><code data-language="html" ng-no-binding rainbow>&lt;p partial-colorify2="{{color2}}" ...
+    </code></pre>
+
+    <p>We want to $watch the color2 scope variable, not the result of a data-binding...</p>
+
+    <p>And passing a "static" value to the directive is now:</p>
+    <pre class="code-snippet" ng-non-bindable><code data-language="html" ng-no-binding rainbow>&lt;p partial-colorify2="'red'" ...
+    </code></pre>
+
+    <p>otherwise you will pass <em>undefined</em> to your direcvite (scope.red)...</p>
+
+</div>
+
+
+<hr>
+
+<h1>Method 2</h1>
+
+<h3>Pass data to the directive using its scope...</h3>
+
+<h3>HTML:</h3>
+
+<pre class="code-snippet" ng-non-bindable><code data-language="javascript" ng-no-binding rainbow>&lt;p partial-colorify3 color="{{color3}}" colorify-regex="[aeiouy]" ....
+</code></pre>
+
+<h3>JS:</h3>
+
+<pre class="code-snippet" ng-non-bindable><code data-language="javascript" ng-no-binding rainbow>app.directive('partialColorify3', function() {
+  return {
+    restrict: 'A',
+    scope: {
+        color: '@'
+    },
+    link: function(scope, element, attrs) {
+        if (!attrs.colorifyRegex)
+            attrs.colorifyRegex = ".*";
+
+        var regex = new RegExp(attrs.colorifyRegex, "g");
+        if (!regex) return;
+        
+        scope.$watch('color', function(newValue) {
+            console.log(newValue);
+            var text = element.text();        
+            var html = text.replace(regex, function(match) {
+                return '<span style="color:' + newValue + '">' + match + '</span>';
+            });      
+            element.html(html);
+        });
+    }
+  };
+});
+</code></pre>
+
+
+<h3>Result:</h3>
+
+<div class="result">
+    <p>color: <input ng-model="color3" /> <span style="color:{{color3}};">{{color3}}</span></p>
+    <p partial-colorify3 color="{{color3}}" colorify-regex="[aeiouy]">Lebowski ipsum little Lebowski Urban Achievers, yes, and proud we are of all of them. Dolor sit amet, consectetur adipiscing elit praesent ac magna justo pellentesque ac lectus quis. Jesus, you mix a hell of a Caucasian, Jackie. Elit blandit fringilla a ut turpis praesent felis. Mr. Lebowski is in seclusion in the West Wing. Ligula, malesuada suscipit malesuada non, ultrices. The nail polish, Walter. Non urna sed orci ipsum, placerat id condimentum rutrum, rhoncus.</p>
+</div>
+
+
+<h3>Why is the watch on 'color' and not on color?</h3>
+
+<p>Thing about angular $watches. <strong>You $watch expressions</strong>... If you have:</p>
+<ul>
+    <li>scope.$watch(myExpression, ...) => myExpression is $eval'ed at every digest cycle
+    <li>scope.$watch('myOtherExpression', ...) => scope.myOtherExpression is $eval'ed at every digest cycle
+</ul>
+
+<h3 ng-non-bindable>Why can I use the interpolated {{...}} notation in the HTML here and not earlier?</h3>
+
+<p>When $watch'ing a variable that belongs to the scope and that is marked as an attribute (@), angular interpolates that variable for us before the $watch is $eval'ed. This is the difference between an attribute variable ('@') and an expression variable ('&'). If we wanted to use the interpolated notation with partial-colorify2 we could have used the $interpolate service to resolve that value in the link function. (I have not tried).</p>
+
+
+<hr>
+
+<h1>Method 3 (my favorite)</h1>
+
+<p>$observe the directive attribute...</p>
+<p>attrs.$observe(), (I am guessing) is a wrapper to $watch that adds interpolation of th the attribute values bfore the $watch is run in the same fashion the $watch does when it detects  an attribute scope variable.</p>
+
+<h3>HTML:<h3>
+
+<pre class="code-snippet" ng-non-bindable><code data-language="javascript" ng-no-binding rainbow>&lt;p partial-colorify4 color="{{color4}}" colorify-regex="[aeiouy]" ....
+</code></pre>
+
+<h3>JS:</h3>
+
+<pre class="code-snippet" ng-non-bindable><code data-language="javascript" ng-no-binding rainbow>app.directive('partialColorify4', function() {
+  return {
+    link: function(scope, element, attrs) {
+        if (!attrs.colorifyRegex)
+            attrs.colorifyRegex = ".*";
+
+        var regex = new RegExp(attrs.colorifyRegex, "g");
+        if (!regex) return;
+        
+        attrs.$observe('color', function(newValue) {
+            var text = element.text();        
+            var html = text.replace(regex, function(match) {
+                return '&lt;span style="color:' + newValue + '">' + match + '</span>';
+            });      
+            element.html(html);
+        });
+    }
+  };
+});
+</code></pre>
+
+<h3>Result:</h3>
+
+<div class="result">
+    <p>color: <input ng-model="color4" /> <span style="color:{{color4}};">{{color4}}</span></p>
+    <p partial-colorify4 color="{{color4}}" colorify-regex="[aeiouy]">Bacon ipsum dolor sit amet ham hock turducken pig pork jerky tail rump. Beef corned beef spare ribs, t-bone ham hock turducken pork loin rump capicola tongue pancetta hamburger turkey. Andouille venison pork chop short loin boudin biltong pork belly drumstick hamburger meatball prosciutto pig shank bresaola frankfurter. Turducken rump jerky boudin ball tip prosciutto ribeye pork belly flank kielbasa leberkas cow corned beef. Filet mignon tri-tip pork loin, chuck cow meatball t-bone jowl bresaola bacon biltong pork brisket andouille.</p>
+</div>
+
+
+<p>WTF? 3 methods to do the same thing, none of them really straighforward.</p>
+
+
+<next-button href="directivecallback" ></next-button>
+
+
+</div>

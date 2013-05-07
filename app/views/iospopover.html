@@ -1,0 +1,28 @@
+
+
+<p><a id="my-button2">Popover without header</a></p>
+
+<div style="background:red; width:300px;height:50px;" id="my-button"></div>
+
+<div id="my-popover2">
+  <div class="content" style="width:500px;">
+    <p><img src="images/pig.jpg" style="width:250px; float:left; margin:5px 15px 10px 0px;">Salami rump beef ribs pork chop fatback. Short ribs tongue beef t-bone. Beef ribs doner ribeye, tongue capicola pork belly hamburger pancetta biltong leberkas. Pork chop pig ham hock jerky swine chicken filet mignon ground round shoulder rump beef ribs chuck kielbasa. Salami cow andouille, bresaola chuck turkey shoulder tail pancetta sausage. Shankle shank turkey, tail spare ribs hamburger tenderloin drumstick. Rump kielbasa ham pig tail t-bone prosciutto.</p>
+  </div>
+</div>
+
+  
+<a popover-button>click here to see a pig</a>
+
+<popover><div class="content" style="width:500px;">    
+    <p><img src="images/pig.jpg" style="width:250px; float:left; margin:5px 15px 10px 0px;">Salami rump beef ribs pork chop fatback. Short ribs tongue beef t-bone. Beef ribs doner ribeye, tongue capicola pork belly hamburger pancetta biltong leberkas. Pork chop pig ham hock jerky swine chicken filet mignon ground round shoulder rump beef ribs chuck kielbasa. Salami cow andouille, bresaola chuck turkey shoulder tail pancetta sausage. Shankle shank turkey, tail spare ribs hamburger tenderloin drumstick. Rump kielbasa ham pig tail t-bone prosciutto.</p>
+  </div></popover>
+
+</div>
+
+<script>
+
+$('#my-button2').popover({   header: '#my-popover2 > .noheader',
+                            content: '#my-popover2 > .content' });
+
+
+</script>

@@ -1,0 +1,34 @@
+<h1>Transclude</h1>
+
+<p>Make your directive template not trash the element content...
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>app.directive('mediumYellowRectangle', function() {
+  return {
+    restrict: 'AE',
+    transclude: true,
+    template: "&lt;div style='width:120px;margin:10px;height:80px;background-color:yellow;'&gt;&lt;div ng-transclude&gt;&lt;/div&gt;&lt;/div&gt;",
+    link: function(scope, element, attrs) {
+            
+    }
+  };
+});
+</code></pre>
+
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>&lt;medium-yellow-rectangle&gt;
+    &lt;p&gt;HELLO&lt;/p&gt;
+&lt;/medium-yellow-rectangle&gt;
+
+&lt;div medium-yellow-rectangle&gt;
+    &lt;p&gt;HELLO&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p medium-yellow-rectangle&gt;HELLO&lt;/p&gt;
+</code></pre>
+
+<medium-yellow-rectangle><p>HELLO</p></medium-yellow-rectangle>
+<div medium-yellow-rectangle><p>HELLO</p></div>
+<p medium-yellow-rectangle>HELLO</p>
+
+
+<next-button href="regexswitch"></next-button>

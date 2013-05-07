@@ -1,0 +1,67 @@
+<h1>Hello World directives</h1>
+
+<hr>
+
+<h2>A hello world html element</h2>
+
+<p><strong>javascript:</strong></p>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>app.directive('helloWorld1', function(){
+    return {
+        name: 'helloWorld1',
+        restrict: 'E',
+        template: '&lt;div&gt;HELLO WORLD&lt;/div&gt;',
+        link: function(scope, element, attrs) {
+            // nothing.            
+        }
+    };
+});
+</code></pre>
+
+<p><strong>html:</strong></p>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>&lt;hello-world-1>&lt;/hello-world-1>
+</code></pre>
+
+<p><strong>result:</strong></p>
+
+<hello-world-1></hello-world-1>
+
+<hr>
+
+<h2>A hello world attribute</h2>
+
+<p>Changes the behavior of any html element to popup an "hello world" alert when clicked...</p>
+
+<strong>javascript:</strong>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>app.directive('helloWorld2', function(){
+    return {
+        name: 'helloWorld2',
+        restrict: 'A',        
+        link: function(scope, element, attrs) {
+            // alert on click...
+            element.bind("click", function() {
+                alert("HELLO WORLD!!!!");
+            });
+        }
+    };
+});
+</code></pre>
+
+<strong>html:</strong>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>&lt;p hello-world2>Click me if you dare!&lt;/p>
+
+&lt;img src="images/dog.jpg" hello-world2 />
+</code></pre>
+
+<p><strong>result:</strong></p>
+
+<p hello-world2>Click me if you dare!</p>
+
+<img src="images/dog.jpg" hello-world2 />
+
+
+
+<next-button href="directiveredify" ></next-button>

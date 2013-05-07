@@ -1,0 +1,71 @@
+<h1>Directive with a callback</h1>
+
+
+<h3>Use case, a dynamic bread crumbs/menu directive:</h3>
+
+<toolbar items="menuItems"
+         on-click="menuClickedCallbackInMyController()" 
+         on-click-item="menuItemClickedCallbackInMyController(parameterClicked)" 
+         on-click-item2="menuItemClickedCallbackInMyController"></toolbar>
+
+<h3>The HTML</h3>
+
+<pre ng-non-bindable class="code-snippet"><code data-language="javascript" rainbow>&lt;toolbar items="menuItems"
+         on-click="menuClickedCallbackInMyController()" 
+         on-click-item="menuItemClickedCallbackInMyController(parameterClicked)" 
+         on-click-item2="menuItemClickedCallbackInMyController">&lt;/toolbar>
+</code>
+</pre>
+
+<h3>The controller</h3>
+
+<pre ng-non-bindable class="code-snippet"><code data-language="javascript" rainbow>app.controller('DirectiveWithCallbackCtrl', function($scope) {
+
+    $scope.menuItems = [ "Hello", "World", "How", "Are", "You", "Doing?", "Help", "Exit" ];
+
+    $scope.menuClickedCallbackInMyController = function() {
+        alert("You clicked on an item!")
+    };
+
+    $scope.menuItemClickedCallbackInMyController = function(item) {
+        alert("You clicked on " + item);
+    };
+
+});
+</code></pre>
+
+
+<h3>The toolbar directive:</h3>
+
+<pre ng-non-bindable class="code-snippet"><code data-language="javascript" rainbow>app.directive('toolbar', function() {
+  return {
+    restrict: 'E',
+    scope: {
+        items: '=',
+        onClick: '&',   
+        onClickItem: '&',
+        onClickItem2: '='
+    },
+    template:   '&lt;ul class="breadcrumbs">' + 
+                    '&lt;li ng-repeat="item in items" >' + 
+                        '&lt;a ng-click="menuItemClicked(item)">{{item}}&lt;/a>' + 
+                    '&lt;/li>' +
+                '&lt;/ul>',
+    link: function(scope, element, attrs) {
+        scope.menuItemClicked = function(item) {            
+            // no argument: this is easy:
+            scope.onClick();
+            // It would be nice id this worked but it does not:
+            scope.onClickItem(item);
+            // this works
+            scope.onClickItem({parameterClicked: item});
+            // another option is to use a two-way binding attribute/scope var, the function is the scope variable
+            scope.onClickItem2(item);
+        }
+    }
+  };
+});
+</code></pre>
+
+
+<next-button href="directiveoutput" ></next-button>

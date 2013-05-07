@@ -1,0 +1,30 @@
+<div ng-controller="DirectiveColorifyCtrl">
+
+<h1>Pass arguments to directive I</h1>
+
+<h2>Easiest method: 3rd argument of the link function...</h2>
+
+<p>Pass an argument to the directive. This directive is similar to the redify directive except you can now specify which color you want to use...</p>
+
+<pre class="code-snippet"><code data-language="javascript" rainbow>app.directive('colorify', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      // change the color to whatever was passed in attribute
+      element.css('color', attrs.colorify);
+    }
+  };
+});</code>
+</pre>
+
+<pre class="code-snippet" ng-non-bindable><code data-language="html" rainbow>&lt;p colorify="lime"&gt;hello world&lt;/p&gt;</code></pre>
+
+<div class="result">
+    <p colorify="lime">hello world</p>
+</div>
+
+
+
+<next-button href="directivepartialcolorify" ></next-button>
+
+</div>

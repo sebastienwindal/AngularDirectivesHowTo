@@ -1,0 +1,29 @@
+<h1>Using an Angular service in a directive</h1>
+
+<p>A stand-alone next button directive control that interacts with the angular $location service...</p>
+
+<h3>JS<h3>
+
+<pre ng-non-bindable class="code-snippet"><code data-language="javascript" rainbow>app.directive('nextButton', ['$location', function($location) {
+    var myDir = {
+        restrict: 'E',
+        template: '&lt;a class="next-button button">Next &lt;i class="icon-large icon-circle-arrow-right">&lt'/i>&lt;/a>',
+        link: function(scope, element, attrs) {
+            element.bind('click', function() {
+                $location.path(attrs.href);
+                scope.$apply() 
+            });
+        }
+    };
+    return myDir;
+}]);
+</code></pre>
+
+<h3>HTML</h3>
+
+<pre ng-non-bindable class="code-snippet"><code data-language="html" rainbow>&lt;next-button href="adipoli" &gt;&lt;/next-button&gt;
+</code></pre>
+
+<h3>Result</h3>
+
+<next-button href="adipoli" ></next-button>
