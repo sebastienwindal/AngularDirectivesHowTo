@@ -18,4 +18,5 @@ console.log("4");
         file.serve(request, response);
 console.log("5");
     });
-}).listen(5000);
+}).listen(port);
+console.log("6");
