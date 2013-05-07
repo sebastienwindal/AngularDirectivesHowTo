@@ -1,5 +1,6 @@
 var static = require('node-static');
- 
+
+console.log("I am starting"); 
 //
 // Create a node-static server instance to serve the './app' folder
 //
